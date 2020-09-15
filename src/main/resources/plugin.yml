@@ -1,0 +1,16 @@
+name: IPCheck
+version: ${project.version}
+main: me.jam.ipcheck.IPCheck
+commands:
+  ipc:
+    permission: ipcheck.ipc
+    permission-message: §cYou do not have permission to use this command.
+    description: Shows information about a player.
+    usage: /ipc <Player Name | UUID | IP>
+
+permissions:
+  ipcheck.*:
+    default: op
+    children:
+      ipcheck.ipc: true
+      ipcheck.notify: true
