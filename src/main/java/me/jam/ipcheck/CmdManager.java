@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class CmdManager implements CommandExecutor {
-    private DatabaseManager db = IPCheck.plugin.getDatabase();
+    private DatabaseManager db = ElementumIPCheck.plugin.getDatabase();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -44,7 +44,7 @@ public class CmdManager implements CommandExecutor {
                         set = searchWithGivenIP(arg);
                     } catch (SQLException e) {
                         e.printStackTrace();
-                        sender.sendMessage(IPCheck.prefix + ChatColor.RED + "An SQL error has occurred: " + e.getErrorCode());
+                        sender.sendMessage(ElementumIPCheck.prefix + ChatColor.RED + "An SQL error has occurred: " + e.getErrorCode());
                         return;
                     }
                 } else {
@@ -56,13 +56,13 @@ public class CmdManager implements CommandExecutor {
                         set = searchWithGivenUUID(player.getUniqueId().toString());
                     } catch (SQLException e) {
                         e.printStackTrace();
-                        sender.sendMessage(IPCheck.prefix + ChatColor.RED + "An SQL error has occurred: " + e.getErrorCode());
+                        sender.sendMessage(ElementumIPCheck.prefix + ChatColor.RED + "An SQL error has occurred: " + e.getErrorCode());
                         return;
                     }
                 }
 
                 if(set.size() == 0) {
-                    sender.sendMessage(IPCheck.prefix + ChatColor.GREEN + "No matching records.");
+                    sender.sendMessage(ElementumIPCheck.prefix + ChatColor.GREEN + "No matching records.");
                     return;
                 }
 
@@ -73,7 +73,7 @@ public class CmdManager implements CommandExecutor {
                     uuids.add("'" + uuid.toString() + "'"); //UUIDs don't include ' so no sql injection possible (?)
                 }
                 sender.sendMessage(
-                        IPCheck.prefix + ChatColor.GREEN + "Showing records with "
+                        ElementumIPCheck.prefix + ChatColor.GREEN + "Showing records with "
                                 + field + " " + arg + " (" + (names.size() - 1) + ")..."
                 );
                 sender.sendMessage(ChatColor.STRIKETHROUGH + "-----------------------");
@@ -95,7 +95,7 @@ public class CmdManager implements CommandExecutor {
                 sender.sendMessage(ChatColor.AQUA + "Accounts: " + ChatColor.GREEN + String.join(ChatColor.AQUA + ", " + ChatColor.GREEN, names));
             }
 
-        }.runTaskAsynchronously(IPCheck.plugin);
+        }.runTaskAsynchronously(ElementumIPCheck.plugin);
         return true;
     }
 

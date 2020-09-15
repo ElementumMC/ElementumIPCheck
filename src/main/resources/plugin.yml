@@ -1,6 +1,6 @@
-name: IPCheck
+name: ElementumIPCheck
 version: ${project.version}
-main: me.jam.ipcheck.IPCheck
+main: me.jam.ipcheck.ElementumIPCheck
 commands:
   ipc:
     permission: ipcheck.ipc

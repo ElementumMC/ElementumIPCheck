@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class EventsManager implements Listener {
-    private DatabaseManager db = IPCheck.plugin.getDatabase();
+    private DatabaseManager db = ElementumIPCheck.plugin.getDatabase();
 
     private final List<Set<UUID>> toNotify = new LinkedList<>();
 
@@ -62,7 +62,7 @@ public class EventsManager implements Listener {
                         }
                     }
                     if (!player.hasPlayedBefore() && names.size() > 0) Bukkit.broadcast(
-                            IPCheck.prefix + ChatColor.YELLOW + name + ChatColor.GRAY + " has alts of "
+                            ElementumIPCheck.prefix + ChatColor.YELLOW + name + ChatColor.GRAY + " has alts of "
                                     + ChatColor.YELLOW + String.join(ChatColor.GRAY + ", " + ChatColor.YELLOW, names),
                             "ipcheck.notify");
 
@@ -72,14 +72,14 @@ public class EventsManager implements Listener {
                                 uuid, name, ip);
                     }
 
-                    if (names.size() > 0) Bukkit.getScheduler().runTask(IPCheck.plugin, () ->
+                    if (names.size() > 0) Bukkit.getScheduler().runTask(ElementumIPCheck.plugin, () ->
                             Bukkit.getPluginManager().callEvent(new AltAccountLoginEvent(evtUUID, name, event.getAddress(), event.getResult(), names))
                     );
                 } catch(SQLException e){
                     e.printStackTrace();
                 }
             }
-        }.runTaskAsynchronously(IPCheck.plugin);
+        }.runTaskAsynchronously(ElementumIPCheck.plugin);
     }
 
     @EventHandler
@@ -92,7 +92,7 @@ public class EventsManager implements Listener {
                 for(UUID uuid : set) list.add(Bukkit.getOfflinePlayer(uuid).getName());
 
                 player.sendMessage(
-                        IPCheck.prefix + ChatColor.YELLOW + list.get(0) + ChatColor.GRAY + " has alts of: " + ChatColor.YELLOW
+                        ElementumIPCheck.prefix + ChatColor.YELLOW + list.get(0) + ChatColor.GRAY + " has alts of: " + ChatColor.YELLOW
                                 + String.join(ChatColor.GRAY + ", " + ChatColor.YELLOW, list.subList(1, list.size()))
                 );
             }
@@ -118,6 +118,6 @@ public class EventsManager implements Listener {
                     e.printStackTrace();
                 }
             }
-        }.runTaskAsynchronously(IPCheck.plugin);
+        }.runTaskAsynchronously(ElementumIPCheck.plugin);
     }
 }

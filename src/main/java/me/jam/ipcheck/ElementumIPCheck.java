@@ -7,18 +7,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 
-public final class IPCheck extends JavaPlugin {
+public final class ElementumIPCheck extends JavaPlugin {
 
-    public static IPCheck plugin;
+    public static ElementumIPCheck plugin;
 
     private DatabaseManager database;
 
-    public static final String prefix = ChatColor.AQUA + "[" + ChatColor.RED + ChatColor.BOLD + "IPCheck" + ChatColor.AQUA + "] ";
+    public static final String prefix = ChatColor.AQUA + "[" + ChatColor.RED + ChatColor.BOLD + "ElementumIPCheck" + ChatColor.AQUA + "] ";
 
     @Override
     public void onEnable() {
         plugin = this;
-
 
         if(!getDataFolder().exists()) getDataFolder().mkdir();
 
@@ -31,7 +30,7 @@ public final class IPCheck extends JavaPlugin {
 
             Bukkit.getPluginManager().registerEvents(new EventsManager(), this);
 
-            getLogger().info("IPCheck has been enabled.");
+            getLogger().info("ElementumIPCheck has been enabled.");
         } catch (SQLException e) {
             e.printStackTrace();
         }
