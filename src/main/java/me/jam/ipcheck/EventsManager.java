@@ -8,7 +8,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.server.BroadcastMessageEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.ResultSet;
