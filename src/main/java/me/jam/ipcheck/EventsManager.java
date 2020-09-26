@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.server.BroadcastMessageEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.ResultSet;
@@ -61,7 +62,7 @@ public class EventsManager implements Listener {
                             toNotify.add(set);
                         }
                     }
-                    if (!player.hasPlayedBefore() && names.size() > 0) Bukkit.broadcast(
+                    if (!player.hasPlayedBefore() && names.size() > 0) broadcast(
                             ElementumIPCheck.prefix + ChatColor.YELLOW + name + ChatColor.GRAY + " has alts of "
                                     + ChatColor.YELLOW + String.join(ChatColor.GRAY + ", " + ChatColor.YELLOW, names),
                             "ipcheck.notify");
@@ -119,5 +120,16 @@ public class EventsManager implements Listener {
                 }
             }
         }.runTaskAsynchronously(ElementumIPCheck.plugin);
+    }
+
+    /**
+     * Announces a message to people with a certain permission, without using Bukkit.broadcast
+     * @param str The message to announce
+     * @param perm The permission
+     * */
+    private static void broadcast(final String str, final String perm) {
+        for(Player p : Bukkit.getOnlinePlayers()) {
+            if(p.hasPermission(perm)) p.sendMessage(str);
+        }
     }
 }
