@@ -84,18 +84,23 @@ public class EventsManager implements Listener {
 
     @EventHandler
     public void onStaffJoin(PlayerJoinEvent event){
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
 
         if(player.hasPermission("ipcheck.notify")) {
-            for(Set<UUID> set : toNotify) {
-                LinkedList<String> list = new LinkedList<>();
-                for(UUID uuid : set) list.add(Bukkit.getOfflinePlayer(uuid).getName());
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    for(Set<UUID> set : toNotify) {
+                        LinkedList<String> list = new LinkedList<>();
+                        for(UUID uuid : set) list.add(Bukkit.getOfflinePlayer(uuid).getName());
 
-                player.sendMessage(
-                        ElementumIPCheck.prefix + ChatColor.YELLOW + list.get(0) + ChatColor.GRAY + " has alts of: " + ChatColor.YELLOW
-                                + String.join(ChatColor.GRAY + ", " + ChatColor.YELLOW, list.subList(1, list.size()))
-                );
-            }
+                        player.sendMessage(
+                                ElementumIPCheck.prefix + ChatColor.YELLOW + list.get(0) + ChatColor.GRAY + " has alts of: " + ChatColor.YELLOW
+                                        + String.join(ChatColor.GRAY + ", " + ChatColor.YELLOW, list.subList(1, list.size()))
+                        );
+                    }
+                }
+            }.runTaskLater(ElementumIPCheck.plugin, 2 * 20L);
         }
     }
 
