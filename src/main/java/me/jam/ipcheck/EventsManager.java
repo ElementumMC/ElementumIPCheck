@@ -124,6 +124,14 @@ public class EventsManager implements Listener {
                 }
             }
         }.runTaskAsynchronously(ElementumIPCheck.plugin);
+
+        //remove them from the notify list
+        for(Set<UUID> set : toNotify) {
+            if(!set.contains(player.getUniqueId())) continue;
+
+            set.remove(player.getUniqueId());
+            if(set.size() < 2) toNotify.remove(set);
+        }
     }
 
     /**
