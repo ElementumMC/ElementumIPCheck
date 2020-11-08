@@ -61,7 +61,7 @@ public class EventsManager implements Listener {
                             toNotify.add(set);
                         }
                     }
-                    if (!player.hasPlayedBefore() && names.size() > 0) Bukkit.broadcast(
+                    if (!player.hasPlayedBefore() && names.size() > 0) broadcast(
                             ElementumIPCheck.prefix + ChatColor.YELLOW + name + ChatColor.GRAY + " has alts of "
                                     + ChatColor.YELLOW + String.join(ChatColor.GRAY + ", " + ChatColor.YELLOW, names),
                             "ipcheck.notify");
@@ -84,18 +84,23 @@ public class EventsManager implements Listener {
 
     @EventHandler
     public void onStaffJoin(PlayerJoinEvent event){
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
 
         if(player.hasPermission("ipcheck.notify")) {
-            for(Set<UUID> set : toNotify) {
-                LinkedList<String> list = new LinkedList<>();
-                for(UUID uuid : set) list.add(Bukkit.getOfflinePlayer(uuid).getName());
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    for(Set<UUID> set : toNotify) {
+                        LinkedList<String> list = new LinkedList<>();
+                        for(UUID uuid : set) list.add(Bukkit.getOfflinePlayer(uuid).getName());
 
-                player.sendMessage(
-                        ElementumIPCheck.prefix + ChatColor.YELLOW + list.get(0) + ChatColor.GRAY + " has alts of: " + ChatColor.YELLOW
-                                + String.join(ChatColor.GRAY + ", " + ChatColor.YELLOW, list.subList(1, list.size()))
-                );
-            }
+                        player.sendMessage(
+                                ElementumIPCheck.prefix + ChatColor.YELLOW + list.get(0) + ChatColor.GRAY + " has alts of: " + ChatColor.YELLOW
+                                        + String.join(ChatColor.GRAY + ", " + ChatColor.YELLOW, list.subList(1, list.size()))
+                        );
+                    }
+                }
+            }.runTaskLater(ElementumIPCheck.plugin, 2 * 20L);
         }
     }
 
@@ -119,5 +124,24 @@ public class EventsManager implements Listener {
                 }
             }
         }.runTaskAsynchronously(ElementumIPCheck.plugin);
+
+        //remove them from the notify list
+        for(Set<UUID> set : toNotify) {
+            if(!set.contains(player.getUniqueId())) continue;
+
+            set.remove(player.getUniqueId());
+            if(set.size() < 2) toNotify.remove(set);
+        }
+    }
+
+    /**
+     * Announces a message to people with a certain permission, without using Bukkit.broadcast
+     * @param str The message to announce
+     * @param perm The permission
+     * */
+    private static void broadcast(final String str, final String perm) {
+        for(Player p : Bukkit.getOnlinePlayers()) {
+            if(p.hasPermission(perm)) p.sendMessage(str);
+        }
     }
 }
