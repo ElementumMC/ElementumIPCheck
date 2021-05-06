@@ -14,3 +14,4 @@ permissions:
     children:
       ipcheck.ipc: true
       ipcheck.notify: true
+      ipcheck.ipc.clear: true

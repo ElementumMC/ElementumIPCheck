@@ -26,7 +26,18 @@ public class CmdManager implements CommandExecutor {
             return true;
         }
 
-        String arg = args[0];
+        String param = args[0];
+        if(args.length > 1 && param.equalsIgnoreCase("clear")) {
+            if(!sender.hasPermission("ipcheck.ipc.clear")) {
+                sender.sendMessage(ChatColor.RED + "You do not have permission for this!");
+                return true;
+            }
+
+            param = args[1];
+        }
+
+        final String arg = param;
+
         String f = "username";
         if(arg.matches("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")) f = "UUID";
         else if(arg.matches("^((25[0-5]|(2[0-4]|1[0-9]|[1-9]|)[0-9])(\\.(?!$)|$)){4}$")) f = "IP";
@@ -72,6 +83,19 @@ public class CmdManager implements CommandExecutor {
                     names.add(Bukkit.getOfflinePlayer(uuid).getName());
                     uuids.add("'" + uuid.toString() + "'"); //UUIDs don't include ' so no sql injection possible (?)
                 }
+
+                if(args[0].equalsIgnoreCase("clear")) {
+                    sender.sendMessage(ElementumIPCheck.prefix + ChatColor.DARK_RED + "Deleting " + ChatColor.YELLOW + set.size()
+                            + ChatColor.DARK_RED + " record" + (set.size() == 1 ? "" : "s") + " matching " + field + " "
+                            + ChatColor.YELLOW + arg + ChatColor.DARK_RED + " from the database...");
+
+                    db.exec("DELETE FROM log WHERE UUID = " + String.join(" OR UUID = ", uuids));
+
+                    sender.sendMessage(ElementumIPCheck.prefix + ChatColor.GREEN + "Deleted " + set.size()
+                            + " record" + (set.size() == 1 ? "" : "s") + ".");
+                    return;
+                }
+
                 sender.sendMessage(
                         ElementumIPCheck.prefix + ChatColor.GREEN + "Showing records with "
                                 + field + " " + arg + " (" + (names.size() - 1) + ")..."
